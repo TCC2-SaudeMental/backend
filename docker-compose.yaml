@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  api:
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+
+  test:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+
+  db:
+    image: postgres:14.2
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tcc2
+    ports:
+      - "5432:5432"
