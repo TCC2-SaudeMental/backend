@@ -10,6 +10,7 @@ class User(Base):
     name = Column(String(255))
     email = Column(String(255), unique=True, index=True)
     _password = Column(String)
+    score = Column(Integer)
 
     @property
     def password(self):

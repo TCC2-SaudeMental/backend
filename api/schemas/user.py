@@ -80,3 +80,11 @@ class UserOutputSchema(Schema):
     id = fields.Int()
     name = fields.Str()
     email = fields.Email()
+    score = fields.Int()
+
+
+class UserChangeScoreSchema(Schema):
+    amount = fields.Int(
+        required=True,
+        error_messages={'required': 'Campo "amount", não informado'}
+    )

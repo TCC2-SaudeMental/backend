@@ -10,6 +10,8 @@ from . import ServiceError
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from api.decorators.errors import DB_error_resistant
 
+DEFAULT_SCORE = 5
+
 
 class UserService:
 
@@ -19,7 +21,9 @@ class UserService:
         name, email, password = itemgetter('name', 'email', 'password')(data)
 
         try:
-            user = User(name=name, email=email, password=password)
+            user = User(
+                name=name, email=email, password=password, score=DEFAULT_SCORE
+            )
 
             with Session(g.engine) as session:
                 session.add(user)
@@ -55,3 +59,37 @@ class UserService:
 
         except NoResultFound:
             raise ServiceError({'login': ['Credenciais Inválidas']})
+
+    @DB_error_resistant
+    def change_score(self, id: int, score_data) -> str:
+        with Session(g.engine) as session:
+            user = session.query(User).get(id)
+            if user is None:
+                raise ServiceError('Usuário requisitado não existe')
+
+            amount = score_data['amount']
+            if (
+                user.score == 5 and amount > 0
+                or user.score == 0 and amount < 0
+            ):
+                pass
+            else:
+                user.score += amount
+
+            session.commit()
+            if user.score == 0:
+                return (
+                    'As suas respostas andam muito... negativas... '
+                    'Recomendamos você a procurar a ajuda de um profissional. '
+                    'Nada substitui o acompanhamento feito por um '
+                    'psicólogo. Nao tenha vergonha de pedir ajuda!'
+                )
+            elif amount >= 0:
+                return 'Que ótimo! Torcemos para que você continue bem!'
+            else:
+                return (
+                    "Que pena... parece que ultimamente você não anda"
+                    "tão bem, mas pode ser momentâneo. "
+                    "Procure cuidar de seu corpo e de sua mente, "
+                    "a próxima vai ser melhor!"
+                )
