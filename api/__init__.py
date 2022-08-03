@@ -2,6 +2,7 @@ from flask import Flask, g
 from flask_cors import CORS
 from api.views.auth import auth
 from api.views.user import user_b
+from api.views.stream import stream_b
 from .db import get_engine
 
 
@@ -22,5 +23,6 @@ def create_app(testing=False):
         # Register Blueprints
         app.register_blueprint(auth)
         app.register_blueprint(user_b)
+        app.register_blueprint(stream_b)
 
         return app

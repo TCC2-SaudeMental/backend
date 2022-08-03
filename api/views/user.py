@@ -15,7 +15,7 @@ user_b = Blueprint(
 
 @user_b.route('/user/score', methods=['PUT'])
 @auth_decorator
-def auth_user():
+def record_score():
     data = request.get_json()
     try:
         if not isinstance(data, Mapping):
