@@ -81,6 +81,7 @@ class UserOutputSchema(Schema):
     name = fields.Str()
     email = fields.Email()
     score = fields.Int()
+    answer_streak = fields.Int()
 
 
 class UserChangeScoreSchema(Schema):

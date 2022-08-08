@@ -1,5 +1,6 @@
 import bcrypt
 from flask import g
+from datetime import date, timedelta
 from operator import itemgetter
 from sqlalchemy.orm import Session
 
@@ -75,6 +76,15 @@ class UserService:
                 pass
             else:
                 user.score += amount
+
+            today = date.today()
+            td = timedelta(1)
+            if user.last_answer and user.last_answer >= today - td:
+                user.answer_streak += 1
+            else:
+                user.answer_streak = 1
+
+            user.last_answer = today
 
             session.commit()
             if user.score == 0:

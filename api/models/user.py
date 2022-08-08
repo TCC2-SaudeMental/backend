@@ -1,5 +1,5 @@
 import bcrypt
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy.orm import relationship
 from api.db import Base
 
@@ -12,6 +12,8 @@ class User(Base):
     email = Column(String(255), unique=True, index=True)
     _password = Column(String)
     score = Column(Integer)
+    last_answer = Column(Date)
+    answer_streak = Column(Integer)
 
     streams = relationship("Stream")
 
