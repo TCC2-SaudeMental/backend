@@ -29,3 +29,21 @@ def stream_duration():
         return error(400, err.messages)
     except Exception as err:
         return error(500, str(err))
+
+
+@stream_b.route('/stream/report', methods=['GET'])
+@auth_decorator
+def get_report():
+
+    try:
+        args = request.args.to_dict()
+        days = args['days'] if 'days' in args else '7'
+        days = int(days)
+
+        streams = StreamService().get_last_streams_by_period(days)
+
+        return response(streams)
+    except ValueError:
+        return error(400, 'Days must be an integer')
+    except Exception as err:
+        return error(500, str(err))

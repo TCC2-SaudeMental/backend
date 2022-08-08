@@ -1,7 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import g
-from api.models.stream import Stream
 from sqlalchemy.orm import Session
+from api.models.stream import Stream
+from api.schemas.stream import StreamOutputSchema
 from api.decorators.errors import DB_error_resistant
 
 
@@ -19,3 +20,16 @@ class StreamService:
             )
             session.add(stream)
             session.commit()
+
+    @DB_error_resistant
+    def get_last_streams_by_period(self, days: int):
+        td = timedelta(days)
+
+        today = datetime.today()
+        initial_date = today - td
+
+        with Session(g.engine) as session:
+            streams = session.query(Stream).filter(
+                Stream.stream_date >= initial_date
+            )
+            return StreamOutputSchema(many=True).dump(streams)

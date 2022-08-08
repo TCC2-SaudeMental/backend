@@ -9,3 +9,9 @@ class StreamInputSchema(Schema):
         required=True,
         error_messages={'required': 'Campo "duração", não informado'}
     )
+
+
+class StreamOutputSchema(Schema):
+    id = fields.Int()
+    stream_date = fields.DateTime()
+    duration = fields.Integer()
