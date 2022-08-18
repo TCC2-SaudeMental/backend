@@ -13,6 +13,7 @@ bcrypt = "^3.2.2"
 PyJWT = "^2.4.0"
 marshmallow = "^3.17.0"
 psycopg2-binary = "^2.9.3"
+gunicorn = "^20.1.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"
