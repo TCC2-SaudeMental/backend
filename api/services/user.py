@@ -70,8 +70,9 @@ class UserService:
 
             amount = score_data['amount']
             if (
-                user.score == 5 and amount > 0
-                or user.score == 0 and amount < 0
+                user.score >= 14 and amount > 0
+                or user.score <= 0 and amount < 0 or user.score + amount > 14
+                or user.score + amount < 0
             ):
                 pass
             else:
