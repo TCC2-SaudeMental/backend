@@ -55,9 +55,7 @@ FROM base as test
 
 COPY --from=builder /dev_venv /dev_venv
 
-COPY ./api ./api
-
-COPY ./tests ./tests
+COPY . .
 
 ENV PATH=/dev_venv/bin:$PATH 
 
