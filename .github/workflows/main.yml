@@ -24,5 +24,9 @@ jobs:
       - name: Run tests
         run: docker run -v "$(pwd)/tests/reports":"/app/tests/reports" test
 
-      - name: Run tests
-        run: ls tests/reports -a
+      - name: Upload Coverage
+        uses: paambaati/codeclimate-action@v2.7.5
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
+        with:
+          coverageLocations: ${{github.workspace}}/tests/reports/.coverage:coverage.py
