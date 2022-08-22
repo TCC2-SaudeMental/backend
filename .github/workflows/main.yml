@@ -22,11 +22,16 @@ jobs:
         run: docker run test flake8
 
       - name: Run tests
-        run: docker run -v "$(pwd)/tests/reports":"/app/tests/reports" test
+        run: |
+          docker run -v "$(pwd)/tests/reports":"/app/tests/reports" test
+          sed -i 's%\/app%'`pwd`'%g' tests/reports/cov.xml 
+
+      - name: Download reporter
+        run: |
+          curl -L -O https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+          chmod +x ./test-reporter-latest-linux-amd64
 
       - name: Upload Coverage
-        uses: paambaati/codeclimate-action@v2.7.5
-        env:
-          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
-        with:
-          coverageLocations: ${{github.workspace}}/tests/reports/.coverage:coverage.py
+        run: |
+          ./test-reporter-latest-linux-amd64 format-coverage --input-type coverage.py -o ./tests/reports/coverage ./tests/reports/cov.xml
+          ./test-reporter-latest-linux-amd64 --input $(pwd)/tests/reports/coverage --id ${{secrets.CC_TEST_REPORTER_ID}} upload-coverage

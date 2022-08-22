@@ -59,4 +59,4 @@ COPY . .
 
 ENV PATH=/dev_venv/bin:$PATH 
 
-CMD pytest -s --cov
+CMD pytest -s --cov-report xml:tests/reports/cov.xml --cov
