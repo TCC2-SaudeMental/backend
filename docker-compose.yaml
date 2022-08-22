@@ -14,11 +14,6 @@ services:
     depends_on:
       - db
 
-  test:
-    build:
-      context: .
-      dockerfile: dev.Dockerfile
-
   db:
     image: postgres:14.2
     environment:
