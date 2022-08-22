@@ -19,6 +19,9 @@ gunicorn = "^20.1.0"
 flake8 = "^4.0.1"
 yapf = "^0.32.0"
 alembic = "^1.8.1"
+pytest = "^7.1.2"
+pytest-cov = "^3.0.0"
+Faker = "^14.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

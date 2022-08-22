@@ -11,7 +11,7 @@ from . import ServiceError
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from api.decorators.errors import DB_error_resistant
 
-DEFAULT_SCORE = 5
+DEFAULT_SCORE = 7
 
 
 class UserService:

@@ -1,0 +1,3 @@
+[run]
+source = api
+data_file = tests/reports/.coverage
