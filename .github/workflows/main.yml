@@ -18,11 +18,11 @@ jobs:
       - name: Build
         run: docker build -t test --target test .
 
-      - name: Run tests
+      - name: Run linter
         run: docker run test flake8
 
       - name: Run tests
-        run: docker run test -v tests/reports:/app/tests/reports
+        run: docker run -v "$(pwd)/tests/reports":"/app/tests/reports" test
 
       - name: Run tests
         run: ls tests/reports -a
