@@ -22,4 +22,7 @@ jobs:
         run: docker run test flake8
 
       - name: Run tests
-        run: docker run test
+        run: docker run test -v tests/reports:/app/tests/reports
+
+      - name: Run tests
+        run: ls tests/reports -a
