@@ -50,3 +50,15 @@ COPY ./alembic.ini ./alembic.ini
 ENV PATH=/dev_venv/bin:$PATH   
 
 CMD alembic upgrade head
+
+FROM base as test
+
+COPY --from=builder /dev_venv /dev_venv
+
+COPY ./api ./api
+
+COPY ./tests ./tests
+
+ENV PATH=/dev_venv/bin:$PATH 
+
+CMD pytest -s --cov

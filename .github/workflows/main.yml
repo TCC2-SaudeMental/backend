@@ -15,11 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install poetry
-        run: pip install poetry
-
       - name: Install dependencies
-        run: poetry install
+        run: docker build -t test --target test .
 
       - name: Run tests
-        run: poetry run pytest -s --cov
+        run: docker run test
