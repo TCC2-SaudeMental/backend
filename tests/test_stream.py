@@ -37,7 +37,7 @@ def get_stream(test_app, get_user):
             yield stream
 
 
-def test_get_report_success(client, get_user, get_stream):
+def test_get_report_weekly_success(client, get_user, get_stream):
     token = sign_jwt(get_user)
 
     response = client.get(
@@ -60,7 +60,47 @@ def test_get_report_success(client, get_user, get_stream):
     assert response.json['status'] == "success"
 
 
-def test_get_report_fail(client):
+def test_get_report_monthly_success(client, get_user, get_stream):
+    token = sign_jwt(get_user)
+
+    response = client.get(
+        '/stream/report?days=31',
+        headers={
+            "Accept": 'application/json',
+            "Content-Type": 'application/json',
+            "Authorization": f'Bearer {token}'
+        }
+    )
+
+    stream = {
+        "duration": get_stream.duration,
+        "id": get_stream.id,
+        "stream_date": get_stream.stream_date.strftime("%Y-%m-%d")
+    }
+
+    assert response.status_code == 200
+    assert stream in response.json['data']
+    assert response.json['status'] == "success"
+
+
+def test_get_report_days_error(client, get_user, get_stream):
+    token = sign_jwt(get_user)
+
+    response = client.get(
+        '/stream/report?days=baddays',
+        headers={
+            "Accept": 'application/json',
+            "Content-Type": 'application/json',
+            "Authorization": f'Bearer {token}'
+        }
+    )
+
+    assert response.status_code == 400
+    assert response.json['status'] == "error"
+    assert response.json['data'] == "Days must be an integer"
+
+
+def test_get_report_401(client):
 
     response = client.get(
         '/stream/report',
@@ -93,7 +133,26 @@ def test_upload_stream_success(client, get_user):
     assert response.json['status'] == "success"
 
 
-def test_upload_stream_error(client):
+def test_upload_stream_json_format_error(client, get_user):
+    token = sign_jwt(get_user)
+
+    payload = "bad payload"
+
+    response = client.post(
+        '/stream',
+        json=payload,
+        headers={
+            "Accept": 'application/json',
+            "Content-Type": 'application/json',
+            "Authorization": f'Bearer {token}'
+        }
+    )
+
+    assert response.status_code == 400
+    assert response.json['status'] == "error"
+
+
+def test_upload_stream_401(client):
 
     payload = {"duration": 3600}
 

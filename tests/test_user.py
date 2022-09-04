@@ -96,7 +96,26 @@ def test_decrease_score_to_zero_success(client, get_user):
     assert response.json['status'] == "success"
 
 
-def test_change_score_fail(client):
+def test_change_score_json_format_error(client, get_user):
+    token = sign_jwt(get_user)
+
+    payload = "bad payload"
+
+    response = client.put(
+        '/user/score',
+        json=payload,
+        headers={
+            "Accept": 'application/json',
+            "Content-Type": 'application/json',
+            "Authorization": f'Bearer {token}'
+        }
+    )
+
+    assert response.status_code == 400
+    assert response.json['status'] == "error"
+
+
+def test_change_score_401(client):
 
     payload = {"amount": 1}
 

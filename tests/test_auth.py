@@ -183,6 +183,23 @@ def test_signup_password_not_match(client):
     assert error_msg in response.json['data']['_schema']
 
 
+def test_signup_json_format_error(client):
+
+    payload = "bad payload"
+
+    response = client.post(
+        '/signup',
+        json=payload,
+        headers={
+            "Accept": 'application/json',
+            "Content-Type": 'application/json'
+        }
+    )
+
+    assert response.status_code == 400
+    assert response.json['status'] == "error"
+
+
 def test_login_valid(client, get_user):
 
     payload = {"email": get_user.email, "password": "password"}
@@ -277,6 +294,23 @@ def test_login_invalid_password(client, get_user):
     assert response.status_code == 400
     assert response.json['status'] == "error"
     assert "Credenciais Inválidas" in response.json['data']['login']
+
+
+def test_login_json_format_error(client, get_user):
+
+    payload = "bad payload"
+
+    response = client.post(
+        '/login',
+        json=payload,
+        headers={
+            "Accept": 'application/json',
+            "Content-Type": 'application/json'
+        }
+    )
+
+    assert response.status_code == 400
+    assert response.json['status'] == "error"
 
 
 def test_auth_user_success(client, get_user):
