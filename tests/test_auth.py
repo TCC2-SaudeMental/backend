@@ -84,6 +84,85 @@ def test_signup_empty_name(client):
     assert error_msg in response.json['data']['name']
 
 
+def test_signup_name_too_long(client):
+
+    faker = Faker()
+
+    name = (
+        "Juugemujugemugookonosurikekaijarisugyoonisugyoomasuunraimasufuraimasu"
+        "kuunerutokoronisumutokoroyaburaikoojinoburaikoojipaipopaipopaipono"
+        "shuuringanshuuringannoguurindaiguurindainoponpokopiinoponpokonaano"
+        "choukyuumeinochoosukedeAlcântaraFranciscoAntónioJoãoCarlosXavierde"
+        "PaulaMiguelRafaelJoaquimJoséGonzagaPascoalCiprianoSerafim"
+    )
+
+    email = faker.last_name() + faker.first_name() + "@gmail.com"
+
+    password = faker.password()
+
+    payload = {
+        "name": name,
+        "email": email,
+        "password": password,
+        "confirm_password": password
+    }
+
+    response = client.post(
+        '/signup',
+        json=payload,
+        headers={
+            "Accept": 'application/json',
+            "Content-Type": 'application/json'
+        }
+    )
+
+    assert response.status_code == 400
+    assert response.json['status'] == "error"
+
+    error_msg = 'O campo "nome" deve ter no máximo 255 caracteres'
+    assert error_msg in response.json['data']['name']
+
+
+def test_signup_email_too_long(client):
+
+    faker = Faker()
+
+    name = faker.first_name()
+
+    email = (
+        "Juugemujugemugookonosurikekaijarisugyoonisugyoomasuunraimasufuraimasu"
+        "kuunerutokoronisumutokoroyaburaikoojinoburaikoojipaipopaipopaipono"
+        "shuuringanshuuringannoguurindaiguurindainoponpokopiinoponpokonaano"
+        "choukyuumeinochoosukedeAlcântaraFranciscoAntónioJoãoCarlosXavierde"
+        "PaulaMiguelRafaelJoaquimJoséGonzagaPascoalCiprianoSerafim"
+        "@gmail.com"
+    )
+
+    password = faker.password()
+
+    payload = {
+        "name": name,
+        "email": email,
+        "password": password,
+        "confirm_password": password
+    }
+
+    response = client.post(
+        '/signup',
+        json=payload,
+        headers={
+            "Accept": 'application/json',
+            "Content-Type": 'application/json'
+        }
+    )
+
+    assert response.status_code == 400
+    assert response.json['status'] == "error"
+
+    error_msg = 'O campo "email" deve ter no máximo 255 caracteres'
+    assert error_msg in response.json['data']['email']
+
+
 def test_signup_invalid_email(client):
 
     faker = Faker()
